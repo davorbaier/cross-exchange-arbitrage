@@ -1,14 +1,29 @@
-# edgeX Account Credentials (REQUIRED for API access)
-# Find these in your edgeX account under "API Management"
-EDGEX_ACCOUNT_ID=your_account_id_here
-EDGEX_STARK_PRIVATE_KEY=your_stark_private_key_here
+# ==========================================
+# Paradex Configuration (REQUIRED for Maker)
+# ==========================================
+# 你的 Paradex (Starknet) 钱包地址，通常以 0x 开头
+# 获取方式：在 Paradex 界面查看账户信息
+PARADEX_ACCOUNT_ADDRESS=your_paradex_address_here
 
+# 你的 Paradex L2 私钥 
+# 注意：这不是 MetaMask 的私钥！你需要从 Paradex 账户设置中导出 "L2 Stark Key" 或 "Private Key"
+PARADEX_PRIVATE_KEY=your_paradex_private_key_here
 
-# EdgeX API Endpoints
-EDGEX_BASE_URL=https://pro.edgex.exchange
-EDGEX_WS_URL=wss://quote.edgex.exchange
+# ==========================================
+# Lighter Configuration (REQUIRED for Taker)
+# ==========================================
+# 你的以太坊钱包私钥 (用于 Lighter 签名)
+API_KEY_PRIVATE_KEY=your_ethereum_private_key_here
 
-# Lighter Configuration
-API_KEY_PRIVATE_KEY=your_api_key_private_key_here
-LIGHTER_ACCOUNT_INDEX=your_account_index
-LIGHTER_API_KEY_INDEX=your_api_key_index
+# Lighter 账户索引 (通常默认为 0)
+LIGHTER_ACCOUNT_INDEX=0
+LIGHTER_API_KEY_INDEX=0
+
+# ==========================================
+# EdgeX Configuration (Legacy/Optional)
+# ==========================================
+# 只有当你通过命令行切换回 EdgeX 交易所时才需要填写以下内容
+# EDGEX_ACCOUNT_ID=
+# EDGEX_STARK_PRIVATE_KEY=
+# EDGEX_BASE_URL=https://pro.edgex.exchange
+# EDGEX_WS_URL=wss://quote.edgex.exchange
