@@ -16,8 +16,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         description='Cross-Exchange Arbitrage Bot Entry Point',
         formatter_class=argparse.RawDescriptionHelpFormatter
-        )
-
+    )
     parser.add_argument('--exchange', type=str, default='paradex',
                         help='Exchange to use as Maker (edgex or paradex)')
     parser.add_argument('--ticker', type=str, default='BTC',
@@ -34,28 +33,20 @@ def parse_arguments():
                         help='Short threshold for price difference (default: 10)')
     return parser.parse_args()
 
-
 def validate_exchange(exchange):
-    """Validate that the exchange is supported."""
-    supported_exchanges = ['edgex', 'paradex'] # 增加了 paradex
+    supported_exchanges = ['edgex', 'paradex']
     if exchange.lower() not in supported_exchanges:
         print(f"Error: Unsupported exchange '{exchange}'")
         print(f"Supported exchanges: {', '.join(supported_exchanges)}")
         sys.exit(1)
 
-
 async def main():
-    """Main entry point that creates and runs the cross-exchange arbitrage bot."""
     args = parse_arguments()
-
-    # 加载环境变量
     dotenv.load_dotenv()
-
-    # 验证交易所参数
     validate_exchange(args.exchange)
 
     try:
-        # 1. 初始化 Maker 交易所 (根据参数选择)
+        # 1. 初始化 Maker 交易所
         if args.exchange.lower() == 'paradex':
             maker_ex = ParadexExchange(
                 account_address=os.getenv("PARADEX_ACCOUNT_ADDRESS"),
@@ -69,7 +60,7 @@ async def main():
             )
             print("Successfully initialized EdgeX as Maker exchange.")
 
-        # 2. 初始化 Taker 交易所 (始终为 Lighter)
+        # 2. 初始化 Taker 交易所 (Lighter)
         taker_ex = LighterExchange(
             api_key_private_key=os.getenv("API_KEY_PRIVATE_KEY"),
             account_index=int(os.getenv("LIGHTER_ACCOUNT_INDEX", 0)),
@@ -77,7 +68,6 @@ async def main():
         )
 
         # 3. 启动策略
-        # 注意：此处假设你已将 EdgexArb 类稍作修改，使其能接收外部传入的 exchange 对象
         bot = EdgexArb(
             ticker=args.ticker.upper(),
             order_quantity=Decimal(args.size),
@@ -85,17 +75,15 @@ async def main():
             max_position=args.max_position,
             long_ex_threshold=Decimal(args.long_threshold),
             short_ex_threshold=Decimal(args.short_threshold),
-            maker_ex=maker_ex,  # 传入动态实例化的 maker
-            taker_ex=taker_ex   # 传入 taker
+            maker_ex=maker_ex, 
+            taker_ex=taker_ex  
         )
 
-        # 运行机器人
         print(f"Starting arbitrage on {args.ticker} between {args.exchange} and Lighter...")
         await bot.run()
 
     except KeyboardInterrupt:
         print("\nCross-Exchange Arbitrage interrupted by user")
-        return 0
     except Exception as e:
         print(f"Error during execution: {e}")
         return 1
