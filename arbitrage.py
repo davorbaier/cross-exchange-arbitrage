@@ -5,7 +5,7 @@ from decimal import Decimal
 import dotenv
 
 from strategy.edgex_arb import EdgexArb
-
+from exchanges.paradex import ParadexExchange
 
 def parse_arguments():
     """Parse command line arguments."""
